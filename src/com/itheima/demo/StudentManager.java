@@ -49,6 +49,18 @@ public class StudentManager {
         }
     }
 
+    // 查询学生
+    public static int catIndex(ArrayList<Student> list, String Sid) {
+        int index = -1;
+        for (int i = 0; i < list.size(); i++) {
+            if (Sid.equals(list.get(i).getSid())) {
+                index = i;
+            }
+        }
+        return index;
+    }
+
+    // 修改学生
     public static void resetStudent(ArrayList<Student> list) {
         Scanner sc = new Scanner(System.in);
         lo:
@@ -75,6 +87,7 @@ public class StudentManager {
         }
     }
 
+    // 查看学生
     public static void catStudent(ArrayList<Student> list) {
         System.out.println("学号" + "\t" + "姓名" + "\t" + "年龄" + "\t" + "生日");
         for (int i = 0; i < list.size(); i++) {
@@ -84,14 +97,20 @@ public class StudentManager {
 
     // 删除学生
     public static void deleteStudent(ArrayList<Student> list) {
-        System.out.println("请输入您想删除的学生的学号:");
-        Scanner sc = new Scanner(System.in);
-        String Sid = sc.next();
-        for (int i = 0; i < list.size(); i++) {
-            if (Sid.equals(list.get(i).getSid())) {
-                list.remove(i);
-            } else {
-                System.out.println("查无此人，请重新输入！");
+        lo:
+        while (true) {
+            System.out.println("请输入您想删除的学生的学号:");
+            Scanner sc = new Scanner(System.in);
+            String Sid = sc.next();
+            int index = catIndex(list, Sid);
+            for (int i = 0; i < list.size(); i++) {
+                if (index == -1) {
+                    System.out.println("查无此人，请重新输入！");
+                    break;
+                } else {
+                    list.remove(i);
+                    break lo;
+                }
             }
         }
     }
@@ -99,15 +118,23 @@ public class StudentManager {
     // 添加学生方法
     public static void addStudent(ArrayList<Student> list) {
         Scanner sc = new Scanner(System.in);
-        System.out.println("请输入学生的学号:");
-        String Sid = sc.next();
-        System.out.println("请输入学生的姓名:");
-        String name = sc.next();
-        System.out.println("请输入学生的年龄:");
-        int age = sc.nextInt();
-        System.out.println("请输入学生的生日:");
-        String birthday = sc.next();
-        Student stu = new Student(Sid, name, age, birthday);
-        list.add(stu);
+        while (true) {
+            System.out.println("请输入学生的学号:");
+            String Sid = sc.next();
+            int index = catIndex(list, Sid);
+            if (index != -1) {
+                System.out.println("此学号已存在！");
+            } else {
+                System.out.println("请输入学生的姓名:");
+                String name = sc.next();
+                System.out.println("请输入学生的年龄:");
+                int age = sc.nextInt();
+                System.out.println("请输入学生的生日:");
+                String birthday = sc.next();
+                Student stu = new Student(Sid, name, age, birthday);
+                list.add(stu);
+                break;
+            }
+        }
     }
 }
